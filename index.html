@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLS Conference 2026: A celebration of cohort studies | UCL Centre for Longitudinal Studies</title>
+  <meta name="description" content="Official interactive conference timetable for CLS Conference 2026, hosted by the Centre for Longitudinal Studies at Cavendish Venues, London. Browse sessions, speakers, and venue maps.">
+  <meta name="keywords" content="CLS Conference 2026, Centre for Longitudinal Studies, UCL, cohort studies, longitudinal research, timetable, agenda, Cavendish Venues">
+  <meta property="og:title" content="CLS Conference 2026: A celebration of cohort studies">
+  <meta property="og:description" content="Explore keynotes, parallel sessions, symposia, and abstracts for the CLS Conference 2026 (22-23 September 2026).">
+  <meta property="og:image" content="https://cls.ucl.ac.uk/wp-content/uploads/2026/01/iStock-971388782.jpg">
+  
+  <link rel="stylesheet" href="styles.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Top Navigation Bar with Dark Purple Logo Lockup -->
+  <nav class="top-nav" aria-label="Main Navigation">
+    <div class="nav-container">
+      <div class="brand-logos">
+        <a href="https://cls.ucl.ac.uk" target="_blank" class="brand-badge" aria-label="CLS UCL Homepage">
+          <img src="cls-logo-nav-dark.png" alt="UCL Centre for Longitudinal Studies" style="height:32px; width:auto;">
+        </a>
+      </div>
+      <div class="nav-actions">
+        <div class="nav-social-links">
+          <a href="https://www.linkedin.com/company/ucl-centre-for-longitudinal-studies" target="_blank" rel="noopener noreferrer" class="social-btn-link" title="CLS on LinkedIn" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0.8 24 22.8" fill="currentColor"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
+          </a>
+          <a href="https://bsky.app/profile/clscohorts.bsky.social" target="_blank" rel="noopener noreferrer" class="social-btn-link" title="CLS on BlueSky" aria-label="BlueSky">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 568 501" fill="currentColor"><path d="M123.121 33.664C187.902 82.247 257.643 181.71 284 234.873c26.357-53.163 96.098-152.626 160.879-201.209C491.439-1.407 568-24.815 568 60.106c0 16.945-9.721 142.455-15.431 162.846-19.827 70.8-92.429 88.892-156.84 77.943 112.723 19.208 141.47 82.903 79.467 146.541-117.763 120.857-172.934-30.347-191.196-80.836-18.262 50.489-73.433 201.693-191.196 80.836-62.003-63.638-33.256-127.333 79.467-146.541-64.411 10.949-137.013-7.143-156.84-77.943C9.721 202.561 0 77.051 0 60.106 0-24.815 76.561-1.407 123.121 33.664Z"/></svg>
+          </a>
+          <a href="https://www.youtube.com/channel/UCUXx6J7PRyhWGf-xKDPW5eA" target="_blank" rel="noopener noreferrer" class="social-btn-link" title="YouTube">
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="15" viewBox="0 3.4 24 17.2" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
+        <div class="nav-controls">
+          <button id="theme-toggle" class="btn-icon" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+            <i data-lucide="sun"></i>
+          </button>
+          <button id="btn-open-map" class="btn-icon" title="View Venue Location & Map" aria-label="View Venue Location & Map">
+            <i data-lucide="map-pin"></i>
+            <span class="nav-btn-text" style="font-size:0.8rem; font-weight:600; margin-left:0.3rem;">Venue & Map</span>
+          </button>
+          <button id="btn-bookmarks" class="btn-schedule-toggle" aria-label="My Schedule">
+            <i data-lucide="star"></i>
+            <span class="nav-btn-text">My Schedule</span>
+            <span id="bookmark-badge-count" class="badge-count">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner Header -->
+  <header class="hero-header">
+    <div class="hero-container">
+      <a href="https://cls.ucl.ac.uk/events/cls-conference-2026/" target="_blank" rel="noopener noreferrer" class="hero-tag" title="Visit official CLS conference page">
+        <i data-lucide="calendar" style="width:16px; height:16px;"></i>
+        <span>Conference programme</span>
+        <i data-lucide="external-link" style="width:12px; height:12px; margin-left:0.25rem;"></i>
+      </a>
+
+      <h1 class="hero-title">CLS Conference 2026:<br>A celebration of cohort studies</h1>
+      <p class="hero-subtitle">
+        Join us and over 120 presenters from UK and international institutions for a celebration of the remarkable possibilities of CLS cohort data.
+      </p>
+
+      <div class="hero-meta-grid">
+        <div class="meta-item">
+          <i data-lucide="calendar" style="color:var(--clr-cls-cyan);"></i>
+          <span>22 – 23 September 2026</span>
+        </div>
+        <div class="meta-item">
+          <i data-lucide="map-pin" style="color:var(--clr-cls-cyan);"></i>
+          <a href="https://maps.app.goo.gl/J5EfA4VxxkCTsyoR7" target="_blank" rel="noopener noreferrer" style="color:white; text-decoration:underline;">
+            Cavendish Venues - 44 Hallam Street, London W1W 6JJ
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main id="main-content" class="main-wrapper">
+
+    <!-- Toolbar Section -->
+    <section class="toolbar-section" aria-label="Schedule Controls">
+      <div class="toolbar-top">
+        <!-- Day Toggle Tabs -->
+        <div class="day-tabs" role="tablist" aria-label="Conference Day Tabs">
+          <button class="day-tab-btn active" data-day="all" role="tab" aria-selected="true">
+            <span>All Days</span>
+            <span id="count-all" class="badge-count">145</span>
+          </button>
+          <button class="day-tab-btn" data-day="Day 1" role="tab" aria-selected="false">
+            <span>Day 1</span>
+            <span id="count-day1" class="badge-count">78</span>
+          </button>
+          <button class="day-tab-btn" data-day="Day 2" role="tab" aria-selected="false">
+            <span>Day 2</span>
+            <span id="count-day2" class="badge-count">67</span>
+          </button>
+          <button class="day-tab-btn" data-day="speakers" role="tab" aria-selected="false">
+            <span>Speakers</span>
+            <span id="count-speakers" class="badge-count">0</span>
+          </button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="search-wrapper">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" id="search-input" class="search-input" placeholder="Search presentation title, speaker, institution..." aria-label="Search schedule">
+          <button id="search-clear-btn" class="search-clear-btn" style="display:none;" title="Clear search" aria-label="Clear search">
+            <i data-lucide="x" style="width:14px; height:14px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Toolbar Sub-Filters -->
+      <div class="toolbar-bottom">
+        <div class="filter-group">
+          <label for="filter-room" style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Room:</label>
+          <select id="filter-room" class="filter-select" aria-label="Filter by Room">
+            <option value="all">All Rooms</option>
+            <option value="Main Hallam Auditorium">Main Hallam Auditorium</option>
+            <option value="Hallam Room 1">Hallam Room 1</option>
+            <option value="Hallam Room 2">Hallam Room 2</option>
+            <option value="Hallam Room 3">Hallam Room 3</option>
+            <option value="Hallam Room 4">Hallam Room 4</option>
+            <option value="Cavendish Lounge">Cavendish Lounge</option>
+          </select>
+
+          <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-left:0.5rem;">Track Type:</label>
+          <div class="tag-pills" id="session-type-pills">
+            <button class="pill-btn active" data-type="all">All</button>
+            <button class="pill-btn" data-type="Keynote">Keynotes</button>
+            <button class="pill-btn" data-type="Parallel Sessions">Parallel Sessions</button>
+            <button class="pill-btn" data-type="Poster Session">Posters</button>
+            <button class="pill-btn" data-type="Plenary">Plenaries</button>
+          </div>
+        </div>
+
+        <div class="view-options">
+          <button id="btn-expand-all" class="btn-icon" title="Expand or Collapse All Parallel Sessions" style="font-size:0.85rem; padding:0.4rem 0.8rem;">
+            <i data-lucide="chevrons-down-up"></i>
+            <span>Expand All</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Schedule List Section -->
+    <section aria-label="Conference Timetable">
+      <div id="schedule-container" class="schedule-container">
+        <!-- Dynamic Schedule Grid rendered via app.js -->
+        <div class="loading-spinner"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Session Detail Modal Popup -->
+  <div id="session-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div>
+          <span id="modal-room-tag" class="room-tag">Hallam Room 1</span>
+          <h2 id="modal-title" style="font-family:var(--font-heading); font-size:1.2rem; margin-top:0.5rem; line-height:1.3;">
+            Session Title
+          </h2>
+        </div>
+        <button id="modal-close-btn" class="modal-close-btn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Speaker Meta -->
+        <div id="modal-speaker-box" class="speaker-meta">
+          <div id="modal-speaker-avatar" class="speaker-avatar">EF</div>
+          <div>
+            <div id="modal-speaker-name" style="font-weight:700; font-size:0.95rem; color:var(--text-main);">Speaker Name</div>
+            <div id="modal-speaker-aff" style="font-size:0.85rem; color:var(--text-muted);">Institution / Affiliation</div>
+          </div>
+        </div>
+
+        <!-- Session Time & Track Info -->
+        <div style="display:flex; flex-wrap:wrap; gap:1rem; font-size:0.85rem; background:var(--bg-body); padding:0.85rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <div><strong>Day:</strong> <span id="modal-day">Day 1 (22 Sep 2026)</span></div>
+          <div><strong>Time:</strong> <span id="modal-time">09:00</span></div>
+          <div><strong>Type:</strong> <span id="modal-type">Parallel Session</span></div>
+          <div><strong>Track:</strong> <span id="modal-track-name">Track Session Name</span></div>
+        </div>
+
+        <!-- Abstract / Notes Description -->
+        <div>
+          <h3 style="font-size:0.9rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); margin-bottom:0.5rem;">Abstract / Description</h3>
+          <p id="modal-description" style="font-size:0.95rem; line-height:1.6; color:var(--text-main);">
+            Session abstract text content goes here...
+          </p>
+        </div>
+
+        <!-- Abstract Link -->
+        <div id="modal-abstract-link-box" style="display:none;">
+          <a id="modal-abstract-url" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none;">
+            <i data-lucide="external-link"></i> View Full Paper Abstract on CLS Website
+          </a>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="modal-bookmark-toggle" class="btn-primary" style="background:var(--bg-body); color:var(--text-main); border:1px solid var(--border-color);">
+          <i data-lucide="star"></i> <span id="modal-bookmark-text">Add Entire Session to My Schedule</span>
+        </button>
+        <button id="modal-ics-btn" class="btn-primary">
+          <i data-lucide="calendar-plus"></i> Export to Calendar (.ics)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Venue Location Map Modal Popup -->
+  <div id="map-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-container" style="max-width:700px;">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-family:var(--font-heading); font-size:1.25rem;">Conference Venue & Location Map</h2>
+          <p style="font-size:0.9rem; color:var(--clr-ucl-purple); font-weight:600; margin-top:0.2rem;">
+            Cavendish Venues - 44 Hallam Street, London W1W 6JJ
+          </p>
+        </div>
+        <button id="map-close-btn" class="modal-close-btn" aria-label="Close map">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div style="background:var(--bg-body); border-radius:var(--radius-md); padding:1.5rem; border:1px solid var(--border-color); text-align:center;">
+          <div style="font-size:1rem; font-weight:600; color:var(--text-main); margin-bottom:1rem;">
+            📍 Cavendish Venues (Hallam Conference Centre)
+          </div>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.5rem; line-height:1.6;">
+            44 Hallam Street, Marylebone, London W1W 6JJ<br>
+            Conveniently located near Great Portland Street, Regent's Park, and Oxford Circus Stations.
+          </p>
+          <a href="https://maps.app.goo.gl/J5EfA4VxxkCTsyoR7" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; font-size:0.95rem;">
+            <i data-lucide="map-pin"></i> Open Location in Google Maps <i data-lucide="external-link"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <img src="cls-logo-lockup.png" alt="Centre for Longitudinal Studies" style="height:36px; width:auto; margin-bottom:1rem;">
+        <p style="font-size:0.85rem; line-height:1.6;">
+          UCL Social Research Institute<br>
+          University College London<br>
+          55-59 Gordon Square, London WC1H 0NU
+        </p>
+        <div class="footer-social-links" style="display:flex; gap:0.6rem; margin-top:1rem;">
+          <a href="https://www.linkedin.com/company/ucl-centre-for-longitudinal-studies" target="_blank" rel="noopener noreferrer" class="social-btn-link" title="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0.8 24 22.8" fill="currentColor"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
+          </a>
+          <a href="https://bsky.app/profile/clscohorts.bsky.social" target="_blank" rel="noopener noreferrer" class="social-btn-link" title="BlueSky">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 568 501" fill="currentColor"><path d="M123.121 33.664C187.902 82.247 257.643 181.71 284 234.873c26.357-53.163 96.098-152.626 160.879-201.209C491.439-1.407 568-24.815 568 60.106c0 16.945-9.721 142.455-15.431 162.846-19.827 70.8-92.429 88.892-156.84 77.943 112.723 19.208 141.47 82.903 79.467 146.541-117.763 120.857-172.934-30.347-191.196-80.836-18.262 50.489-73.433 201.693-191.196 80.836-62.003-63.638-33.256-127.333 79.467-146.541-64.411 10.949-137.013-7.143-156.84-77.943C9.721 202.561 0 77.051 0 60.106 0-24.815 76.561-1.407 123.121 33.664Z"/></svg>
+          </a>
+          <a href="https://www.youtube.com/channel/UCUXx6J7PRyhWGf-xKDPW5eA" target="_blank" rel="noopener noreferrer" class="social-btn-link" title="YouTube">
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="15" viewBox="0 3.4 24 17.2" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-title">Quick Links</h4>
+        <ul style="list-style:none; font-size:0.85rem; line-height:2;">
+          <li><a href="https://cls.ucl.ac.uk/events/cls-conference-2026/" target="_blank" rel="noopener noreferrer">Conference programme</a></li>
+          <li><a href="https://maps.app.goo.gl/J5EfA4VxxkCTsyoR7" target="_blank" rel="noopener noreferrer">Venue Map (Cavendish Venues)</a></li>
+          <li><a href="https://cls.ucl.ac.uk/signup/" target="_blank" rel="noopener noreferrer">Join our mailing list</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-title">Conference Information</h4>
+        <p style="font-size:0.85rem; line-height:1.6;">
+          The CLS Conference 2026 brings together researchers from across disciplines, sectors, and career stages to showcase outstanding life course research using cohort data.
+        </p>
+      </div>
+    </div>
+    <div style="text-align:center; padding-top:2rem; margin-top:2rem; border-top:1px solid #1e293b; font-size:0.8rem;">
+      &copy; 2026 UCL Centre for Longitudinal Studies. Hosted on GitHub Pages.
+    </div>
+  </footer>
+
+  <!-- Floating Back to Top Button -->
+  <button id="btn-back-to-top" class="back-to-top-btn" title="Back to top of page" aria-label="Back to top">
+    <i data-lucide="arrow-up" style="width:20px; height:20px;"></i>
+  </button>
+
+  <!-- Temporary Passcode Lock Overlay for Internal Testing -->
+  <div id="passcode-overlay" class="modal-overlay active" style="z-index: 9999; background: var(--bg-body);" role="dialog">
+    <div class="modal-container" style="max-width: 420px; text-align: center; padding: 2.5rem 1.5rem; margin: auto;">
+      <div style="width: 56px; height: 56px; border-radius: 50%; background: #f4eaef; color: var(--clr-ucl-purple); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto;">
+        <i data-lucide="lock" style="width: 28px; height: 28px;"></i>
+      </div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+        CLS Conference 2026
+      </h2>
+      <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.5;">
+        This preview application is password-protected for internal organization testing. Enter passcode to unlock.
+      </p>
+      <form id="passcode-form" style="display: flex; flex-direction: column; gap: 1rem;">
+        <input type="password" id="passcode-input" placeholder="Enter passcode" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); font-size: 1.1rem; text-align: center; letter-spacing: 0.1em;" autocomplete="off" required>
+        <button type="submit" id="btn-passcode-submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem; font-size: 1rem;">
+          Unlock Preview <i data-lucide="arrow-right"></i>
+        </button>
+        <div id="passcode-error" style="display: none; color: var(--clr-danger); font-size: 0.85rem; font-weight: 600; margin-top: 0.25rem;">
+          Incorrect passcode. Please try again.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="sessions-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
