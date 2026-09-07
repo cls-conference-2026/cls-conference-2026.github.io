@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalSpeakerName = document.getElementById('modal-speaker-name');
   const modalSpeakerAff = document.getElementById('modal-speaker-aff');
   const modalTrackName = document.getElementById('modal-track-name');
+  const modalChairBox = document.getElementById('modal-chair-box');
+  const modalChair = document.getElementById('modal-chair');
   const modalDescription = document.getElementById('modal-description');
   const modalAbstractLinkBox = document.getElementById('modal-abstract-link-box');
   const modalAbstractUrl = document.getElementById('modal-abstract-url');
@@ -59,7 +61,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnOpenMap = document.getElementById('btn-open-map');
   const mapCloseBtn = document.getElementById('map-close-btn');
 
-  const ALL_PARALLEL_ROOMS = ["Hallam Room 1", "Hallam Room 2", "Hallam Room 3", "Hallam Room 4"];
+  const ALL_PARALLEL_ROOMS = ["Council Chamber", "Oxford Suite", "Warren Suite", "Euston Suite"];
+
+  const PARALLEL_ROOM_ORDER = {
+    "Council Chamber": 1,
+    "Oxford Suite": 2,
+    "Warren Suite": 3,
+    "Euston Suite": 4
+  };
+
+  function getRoomOrderIndex(room) {
+    if (!room) return 99;
+    if (PARALLEL_ROOM_ORDER[room]) return PARALLEL_ROOM_ORDER[room];
+    if (room.includes('Council')) return 1;
+    if (room.includes('Oxford')) return 2;
+    if (room.includes('Warren')) return 3;
+    if (room.includes('Euston')) return 4;
+    return 99;
+  }
 
   // 1. Synchronous / Async Schedule Loader
   async function loadScheduleData() {
@@ -183,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         (s.affiliation && s.affiliation.toLowerCase().includes(q)) ||
         (s.track_session && s.track_session.toLowerCase().includes(q)) ||
         (s.session_block && s.session_block.toLowerCase().includes(q)) ||
+        (s.session_chair && s.session_chair.toLowerCase().includes(q)) ||
         (s.room && s.room.toLowerCase().includes(q))
       );
     }
@@ -279,10 +299,14 @@ document.addEventListener('DOMContentLoaded', () => {
           trackTitle: trackKey,
           room: session.room,
           sessionType: session.session_type,
+          sessionChair: session.session_chair || '',
           day: session.day,
           time: session.time_start,
           talks: []
         };
+      }
+      if (!timeBlocks[blockKey].tracksMap[trackKey].sessionChair && session.session_chair) {
+        timeBlocks[blockKey].tracksMap[trackKey].sessionChair = session.session_chair;
       }
       timeBlocks[blockKey].tracksMap[trackKey].talks.push(session);
     });
@@ -329,9 +353,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      // Sort tracks by room name for consistent 1, 2, 3, 4 display
+      // Sort tracks by specified room order (Council Chamber, Oxford Suite, Warren Suite, Euston Suite)
       const sortedTracks = Object.values(block.tracksMap).sort((a, b) => {
-        return (a.room || '').localeCompare(b.room || '', undefined, { numeric: true, sensitivity: 'base' });
+        const orderA = getRoomOrderIndex(a.room);
+        const orderB = getRoomOrderIndex(b.room);
+        if (orderA !== orderB) return orderA - orderB;
+        return (a.room || '').localeCompare(b.room || '');
       });
 
       html += `
@@ -394,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach click listener for talk item modal details
     document.querySelectorAll('.talk-item').forEach(item => {
       item.addEventListener('click', (e) => {
-        if (e.target.closest('.btn-abstract')) return;
+        if (e.target.closest('.btn-abstract') || e.target.closest('.btn-session-abstract')) return;
         const id = item.getAttribute('data-id');
         openSessionModal(id);
       });
@@ -403,6 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function createTrackAccordionHtml(track) {
     const roomClass = getRoomColorClass(track.room);
+    const hasRoom = track.room && track.room.trim().length > 0;
 
     // Render "Room not in use" card without bookmark star button
     if (track.isNotInUse) {
@@ -411,9 +439,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="session-group-header static-header">
             <div class="session-group-title-box">
               <div class="session-group-meta-row">
-                <span class="room-tag ${roomClass}">
-                  <i data-lucide="map-pin" style="width:12px; height:12px;"></i> ${escapeHtml(track.room)}
-                </span>
+                ${hasRoom ? `
+                  <span class="room-tag">
+                    <i data-lucide="map-pin" style="width:12px; height:12px;"></i> ${escapeHtml(track.room)}
+                  </span>
+                ` : ''}
                 <span class="session-type-badge" style="background:var(--bg-body); color:var(--text-light);">Not In Use</span>
               </div>
               <h3 class="session-group-title" style="color:var(--text-muted); font-weight:500; font-style:italic;">Room not in use during this session</h3>
@@ -429,18 +459,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const trackKey = getTrackKey(track.trackTitle, track.day, track.time);
     const isBookmarked = state.bookmarks.has(trackKey);
 
+    const getAbstractUrl = (t) => (t && t.campaign_url && t.campaign_url.trim()) ? t.campaign_url.trim() : (t ? t.abstract_url : null);
+    const sessionAbstractUrl = (track.talks && track.talks.find(t => getAbstractUrl(t))) ? getAbstractUrl(track.talks.find(t => getAbstractUrl(t))) : (getAbstractUrl(track) || null);
+
     return `
       <div class="session-group-card ${shouldExpand ? 'expanded' : ''} ${!expandable ? 'static-card' : ''}">
         <div class="session-group-header ${expandable ? 'clickable-header' : 'static-header'}" ${expandable ? `role="button" tabindex="0" aria-expanded="${shouldExpand ? 'true' : 'false'}" aria-label="Toggle presentations for ${escapeHtml(track.trackTitle)}"` : ''}>
           <div class="session-group-title-box">
             <div class="session-group-meta-row">
-              <span class="room-tag ${roomClass}">
-                <i data-lucide="map-pin" style="width:12px; height:12px;"></i> ${escapeHtml(track.room)}
-              </span>
+              ${hasRoom ? `
+                <span class="room-tag">
+                  <i data-lucide="map-pin" style="width:12px; height:12px;"></i> ${escapeHtml(track.room)}
+                </span>
+              ` : ''}
               <span class="session-type-badge">${escapeHtml(track.sessionType)}</span>
               ${expandable ? `<span class="talk-count-badge">${track.talks.length} ${track.talks.length === 1 ? 'Talk' : 'Talks'}</span>` : ''}
             </div>
             <h3 class="session-group-title">${escapeHtml(track.trackTitle)}</h3>
+            ${track.sessionChair ? `
+              <div class="session-chair-badge" style="margin-top:0.35rem; font-size:0.825rem; color:var(--text-muted); font-weight:500;">
+                <i data-lucide="user-check" style="width:14px; height:14px; vertical-align:middle; color:var(--clr-cls-cyan-dark); margin-right:0.25rem;"></i>
+                <strong>Chair:</strong> ${escapeHtml(track.sessionChair)}
+              </div>
+            ` : ''}
             ${!expandable && track.talks && track.talks.length === 1 && track.talks[0].speaker ? `
               <div class="talk-speaker" style="margin-top:0.35rem; font-size:0.85rem;">
                 <i data-lucide="user" style="width:14px; height:14px; vertical-align:middle; color:var(--clr-ucl-purple);"></i>
@@ -467,8 +508,23 @@ document.addEventListener('DOMContentLoaded', () => {
             <ul class="talk-list">
               ${track.talks.map(talk => createTalkItemHtml(talk)).join('')}
             </ul>
+            ${sessionAbstractUrl ? `
+              <div class="session-abstract-footer">
+                <a href="${sessionAbstractUrl}" target="_blank" rel="noopener noreferrer" class="btn-session-abstract" onclick="event.stopPropagation();">
+                  <i data-lucide="external-link" style="width:14px; height:14px;"></i> View session abstracts
+                </a>
+              </div>
+            ` : ''}
           </div>
-        ` : ''}
+        ` : `
+          ${sessionAbstractUrl ? `
+            <div class="session-abstract-footer">
+              <a href="${sessionAbstractUrl}" target="_blank" rel="noopener noreferrer" class="btn-session-abstract" onclick="event.stopPropagation();">
+                <i data-lucide="external-link" style="width:14px; height:14px;"></i> View session abstracts
+              </a>
+            </div>
+          ` : ''}
+        `}
       </div>
     `;
   }
@@ -504,7 +560,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sp.affiliation.toLowerCase().includes(q) ||
         sp.talks.some(t => 
           (t.presentation_title && t.presentation_title.toLowerCase().includes(q)) ||
-          (t.track_session && t.track_session.toLowerCase().includes(q))
+          (t.track_session && t.track_session.toLowerCase().includes(q)) ||
+          (t.session_chair && t.session_chair.toLowerCase().includes(q))
         )
       );
     }
@@ -599,9 +656,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     return `
                       <div class="speaker-talk-card talk-item" data-id="${t.id}">
                         <div class="speaker-talk-meta">
-                          <span class="room-tag ${getRoomColorClass(t.room)}" style="font-size:0.7rem; padding:0.15rem 0.5rem;">
-                            <i data-lucide="map-pin" style="width:10px; height:10px;"></i> ${escapeHtml(t.room)}
-                          </span>
+                          ${t.room && t.room.trim() ? `
+                            <span class="room-tag" style="font-size:0.7rem; padding:0.15rem 0.5rem;">
+                              <i data-lucide="map-pin" style="width:10px; height:10px;"></i> ${escapeHtml(t.room)}
+                            </span>
+                          ` : ''}
                           ${isPoster ? `
                             <span class="session-type-badge" style="background:#f4eaef; color:var(--clr-cls-cyan-dark); border-color:rgba(123,44,191,0.2); font-size:0.68rem; padding:0.1rem 0.45rem;">
                               Poster session
@@ -648,23 +707,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           ` : ''}
         </div>
-        <div class="talk-actions">
-          ${session.abstract_url ? `
-            <a href="${session.abstract_url}" target="_blank" class="btn-abstract" onclick="event.stopPropagation();">
-              <i data-lucide="external-link" style="width:12px; height:12px;"></i> Abstract
-            </a>
-          ` : ''}
-        </div>
       </li>
     `;
   }
 
   function getRoomColorClass(room) {
-    if (!room) return '';
-    if (room.includes('Council') || room.includes('Main') || room.includes('1')) return 'room-council';
-    if (room.includes('Regent') || room.includes('Lounge') || room.includes('2')) return 'room-regent';
-    if (room.includes('Ingold') || room.includes('3')) return 'room-ingold';
-    if (room.includes('Medawar') || room.includes('4')) return 'room-medawar';
     return '';
   }
 
@@ -710,7 +757,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!session) return;
     state.activeSession = session;
 
-    modalRoomTag.textContent = session.room;
+    if (session.room && session.room.trim()) {
+      modalRoomTag.style.display = 'inline-flex';
+      modalRoomTag.innerHTML = `<i data-lucide="map-pin" style="width:12px; height:12px; margin-right:0.3rem;"></i> ${escapeHtml(session.room)}`;
+    } else {
+      modalRoomTag.style.display = 'none';
+    }
     modalTitle.textContent = session.presentation_title;
     modalDay.textContent = `${session.day} (${session.date})`;
     modalTime.textContent = session.time_start;
@@ -726,11 +778,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     modalTrackName.textContent = session.track_session || session.session_block;
+    if (session.session_chair && modalChairBox && modalChair) {
+      modalChairBox.style.display = 'block';
+      modalChair.textContent = session.session_chair;
+    } else if (modalChairBox) {
+      modalChairBox.style.display = 'none';
+    }
     modalDescription.textContent = session.notes_description || 'No additional abstract notes provided for this session.';
 
-    if (session.abstract_url) {
+    const abstractLink = (session.campaign_url && session.campaign_url.trim()) ? session.campaign_url.trim() : session.abstract_url;
+    if (abstractLink) {
       modalAbstractLinkBox.style.display = 'block';
-      modalAbstractUrl.href = session.abstract_url;
+      modalAbstractUrl.href = abstractLink;
     } else {
       modalAbstractLinkBox.style.display = 'none';
     }
@@ -930,30 +989,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Passcode Lock Verification for Internal Testing
-  const passcodeOverlay = document.getElementById('passcode-overlay');
-  const passcodeForm = document.getElementById('passcode-form');
-  const passcodeInput = document.getElementById('passcode-input');
-  const passcodeError = document.getElementById('passcode-error');
-  const CORRECT_PASSCODE = '2026';
-
-  if (sessionStorage.getItem('cls_unlocked') === 'true') {
-    if (passcodeOverlay) passcodeOverlay.classList.remove('active');
-  }
-
-  if (passcodeForm) {
-    passcodeForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const val = (passcodeInput.value || '').trim();
-      if (val === CORRECT_PASSCODE || val.toLowerCase() === 'cls2026') {
-        sessionStorage.setItem('cls_unlocked', 'true');
-        if (passcodeOverlay) passcodeOverlay.classList.remove('active');
-        if (passcodeError) passcodeError.style.display = 'none';
-      } else {
-        if (passcodeError) passcodeError.style.display = 'block';
-      }
-    });
-  }
 
   // Initialize
   loadScheduleData();

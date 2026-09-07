@@ -83,12 +83,12 @@ select:focus-visible {
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --shadow-glow: 0 0 20px rgba(221, 189, 255, 0.35);
 
-  /* Room Tag Colors */
-  --room-council: #8b5cf6;
-  --room-regent: #ec4899;
-  --room-ingold: #7b2cbf;
-  --room-medawar: #10b981;
-  --room-jevons: #f59e0b;
+  /* Room Tag Colors (Matched to Floor Map Legend) */
+  --room-warren: #381d54;
+  --room-oxford: #d8b4fe;
+  --room-euston: #00c4ee;
+  --room-council: #9333ea;
+  --room-regent: #e9d5ff;
 
   /* Typography */
   --font-heading: 'Outfit', sans-serif;
@@ -939,13 +939,15 @@ a.hero-tag:hover {
   font-weight: 700;
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-full);
-  background: rgba(123, 44, 191, 0.1);
-  color: var(--clr-cls-cyan-dark);
+  background: rgba(75, 10, 120, 0.08);
+  color: var(--clr-ucl-purple);
+  border: 1px solid rgba(75, 10, 120, 0.2);
 }
 
 [data-theme="dark"] .room-tag {
-  background: rgba(221, 189, 255, 0.2);
+  background: rgba(221, 189, 255, 0.16);
   color: #ddbdff;
+  border: 1px solid rgba(221, 189, 255, 0.3);
 }
 
 .talk-count-badge {
@@ -1092,6 +1094,53 @@ a.hero-tag:hover {
   color: white;
   text-decoration: none;
 }
+
+.session-abstract-footer {
+  padding: 0.85rem 1.25rem;
+  background: rgba(123, 44, 191, 0.04);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn-session-abstract {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-sm);
+  background: var(--clr-ucl-purple);
+  color: #ffffff !important;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-session-abstract:hover {
+  background: #5a189a;
+  color: #ffffff !important;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .session-abstract-footer {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .btn-session-abstract {
+  background: #7b2cbf;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-session-abstract:hover {
+  background: #9d4edd;
+  color: #ffffff !important;
+}
+
 
 .bookmark-btn {
   background: transparent;
@@ -1295,6 +1344,18 @@ footer {
   font-weight: 700;
   font-size: 1.1rem;
   margin-bottom: 1rem;
+}
+
+footer a {
+  color: #ffffff !important;
+  text-decoration: underline;
+  transition: opacity var(--transition-fast);
+}
+
+footer a:hover {
+  color: #ffffff !important;
+  opacity: 0.85;
+  text-decoration: underline;
 }
 
 /* Responsive Media Queries (Mobile & Tablet Optimization) */

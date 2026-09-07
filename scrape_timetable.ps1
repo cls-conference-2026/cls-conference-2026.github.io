@@ -187,10 +187,12 @@ foreach ($item in $agendaItems) {
             track_session      = $title
             room               = $defaultRoom
             session_type       = $sessionType
+            session_chair      = ""
             presentation_title = $title
             speaker            = $speaker
             affiliation        = $affiliation
             abstract_url       = $abstractUrl
+            campaign_url       = ""
             notes_description  = $descClean
             status             = "Confirmed"
         })

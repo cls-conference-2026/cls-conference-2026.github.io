@@ -189,10 +189,12 @@ def scrape():
                 'track_session': title_str,
                 'room': default_room,
                 'session_type': session_type,
+                'session_chair': '',
                 'presentation_title': title_str,
                 'speaker': speaker,
                 'affiliation': affiliation,
                 'abstract_url': abstract_url,
+                'campaign_url': '',
                 'notes_description': desc_clean,
                 'status': 'Confirmed'
             })
@@ -200,8 +202,8 @@ def scrape():
 
     fieldnames = [
         'id', 'day', 'date', 'time_start', 'time_end', 'session_block',
-        'track_session', 'room', 'session_type', 'presentation_title',
-        'speaker', 'affiliation', 'abstract_url', 'notes_description', 'status'
+        'track_session', 'room', 'session_type', 'session_chair', 'presentation_title',
+        'speaker', 'affiliation', 'abstract_url', 'campaign_url', 'notes_description', 'status'
     ]
 
     with open(OUTPUT_FILE, 'w', newline='', encoding='utf-8') as f:

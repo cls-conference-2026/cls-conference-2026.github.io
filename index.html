@@ -22,7 +22,7 @@
   <nav class="top-nav" aria-label="Main Navigation">
     <div class="nav-container">
       <div class="brand-logos">
-        <a href="https://cls.ucl.ac.uk" target="_blank" class="brand-badge" aria-label="CLS UCL Homepage">
+        <a href="https://cls.ucl.ac.uk/?utm_source=programme&utm_medium=web&utm_campaign=conf_2026" target="_blank" class="brand-badge" aria-label="CLS UCL Homepage">
           <img src="cls-logo-nav-dark.png" alt="UCL Centre for Longitudinal Studies" style="height:32px; width:auto;">
         </a>
       </div>
@@ -59,7 +59,7 @@
   <!-- Hero Banner Header -->
   <header class="hero-header">
     <div class="hero-container">
-      <a href="https://cls.ucl.ac.uk/events/cls-conference-2026/" target="_blank" rel="noopener noreferrer" class="hero-tag" title="Visit official CLS conference page">
+      <a href="https://cls.ucl.ac.uk/events/cls-conference-2026/?utm_source=programme&utm_medium=web&utm_campaign=conf_2026" target="_blank" rel="noopener noreferrer" class="hero-tag" title="Visit official CLS conference page">
         <i data-lucide="calendar" style="width:16px; height:16px;"></i>
         <span>Conference programme</span>
         <i data-lucide="external-link" style="width:12px; height:12px; margin-left:0.25rem;"></i>
@@ -114,7 +114,7 @@
         <!-- Search Input -->
         <div class="search-wrapper">
           <i data-lucide="search" class="search-icon"></i>
-          <input type="text" id="search-input" class="search-input" placeholder="Search presentation title, speaker, institution..." aria-label="Search schedule">
+          <input type="text" id="search-input" class="search-input" placeholder="Search presentation title, speaker, chair, institution..." aria-label="Search schedule">
           <button id="search-clear-btn" class="search-clear-btn" style="display:none;" title="Clear search" aria-label="Clear search">
             <i data-lucide="x" style="width:14px; height:14px;"></i>
           </button>
@@ -127,12 +127,11 @@
           <label for="filter-room" style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Room:</label>
           <select id="filter-room" class="filter-select" aria-label="Filter by Room">
             <option value="all">All Rooms</option>
-            <option value="Main Hallam Auditorium">Main Hallam Auditorium</option>
-            <option value="Hallam Room 1">Hallam Room 1</option>
-            <option value="Hallam Room 2">Hallam Room 2</option>
-            <option value="Hallam Room 3">Hallam Room 3</option>
-            <option value="Hallam Room 4">Hallam Room 4</option>
-            <option value="Cavendish Lounge">Cavendish Lounge</option>
+            <option value="Council Chamber">Council Chamber</option>
+            <option value="Oxford Suite">Oxford Suite</option>
+            <option value="Warren Suite">Warren Suite</option>
+            <option value="Euston Suite">Euston Suite</option>
+            <option value="Regent Suite">Regent Suite</option>
           </select>
 
           <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-left:0.5rem;">Track Type:</label>
@@ -169,7 +168,7 @@
     <div class="modal-container">
       <div class="modal-header">
         <div>
-          <span id="modal-room-tag" class="room-tag">Hallam Room 1</span>
+          <span id="modal-room-tag" class="room-tag">Council Chamber</span>
           <h2 id="modal-title" style="font-family:var(--font-heading); font-size:1.2rem; margin-top:0.5rem; line-height:1.3;">
             Session Title
           </h2>
@@ -195,6 +194,7 @@
           <div><strong>Time:</strong> <span id="modal-time">09:00</span></div>
           <div><strong>Type:</strong> <span id="modal-type">Parallel Session</span></div>
           <div><strong>Track:</strong> <span id="modal-track-name">Track Session Name</span></div>
+          <div id="modal-chair-box" style="display:none;"><strong>Session Chair:</strong> <span id="modal-chair">Chair Name</span></div>
         </div>
 
         <!-- Abstract / Notes Description -->
@@ -226,12 +226,12 @@
 
   <!-- Venue Location Map Modal Popup -->
   <div id="map-modal" class="modal-overlay" aria-hidden="true" role="dialog">
-    <div class="modal-container" style="max-width:700px;">
+    <div class="modal-container" style="max-width:760px;">
       <div class="modal-header">
         <div>
-          <h2 style="font-family:var(--font-heading); font-size:1.25rem;">Conference Venue & Location Map</h2>
+          <h2 style="font-family:var(--font-heading); font-size:1.25rem;">Conference Venue & Floor Plan</h2>
           <p style="font-size:0.9rem; color:var(--clr-ucl-purple); font-weight:600; margin-top:0.2rem;">
-            Cavendish Venues - 44 Hallam Street, London W1W 6JJ
+            Cavendish Venues (Hallam Conference Centre) - 44 Hallam Street, London W1W 6JJ
           </p>
         </div>
         <button id="map-close-btn" class="modal-close-btn" aria-label="Close map">
@@ -239,16 +239,68 @@
         </button>
       </div>
 
-      <div class="modal-body">
-        <div style="background:var(--bg-body); border-radius:var(--radius-md); padding:1.5rem; border:1px solid var(--border-color); text-align:center;">
-          <div style="font-size:1rem; font-weight:600; color:var(--text-main); margin-bottom:1rem;">
-            📍 Cavendish Venues (Hallam Conference Centre)
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:1.25rem;">
+        <!-- Floor Plan Graphic with Integrated Legend -->
+        <div style="position:relative; background:#ffffff; border-radius:var(--radius-md); padding:1rem; border:1px solid var(--border-color); text-align:center; overflow:hidden; box-shadow:var(--shadow-sm);">
+          <img src="venue-floor-map.png" alt="Cavendish Venues Floor Plan with Legend" style="width:100%; height:auto; max-height:580px; object-fit:contain; border-radius:var(--radius-sm);">
+
+          <!-- Integrated Map Legend Overlay Box -->
+          <div style="position:absolute; top:1.25rem; right:1.25rem; background:rgba(255, 255, 255, 0.94); backdrop-filter:blur(8px); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem 1rem; text-align:left; box-shadow:0 4px 12px rgba(0,0,0,0.12); max-width:220px; font-size:0.78rem;">
+            <div style="font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-main); margin-bottom:0.5rem; font-size:0.75rem; display:flex; align-items:center; gap:0.35rem;">
+              <i data-lucide="map" style="width:14px; height:14px; color:var(--clr-ucl-purple);"></i> Floor Plan Legend
+            </div>
+            
+            <div style="display:flex; flex-direction:column; gap:0.45rem;">
+              <div>
+                <div style="font-weight:700; color:var(--text-muted); font-size:0.7rem; text-transform:uppercase;">Third Floor</div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-top:0.15rem;">
+                  <span style="width:12px; height:12px; border-radius:3px; background:#381d54; display:inline-block; flex-shrink:0;"></span>
+                  <span style="font-weight:600; color:var(--text-main);">Warren Suite</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-top:0.15rem;">
+                  <span style="width:12px; height:12px; border-radius:3px; background:#d8b4fe; border:1px solid #b27aff; display:inline-block; flex-shrink:0;"></span>
+                  <span style="font-weight:600; color:var(--text-main);">Oxford Suite</span>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border-color); padding-top:0.35rem;">
+                <div style="font-weight:700; color:var(--text-muted); font-size:0.7rem; text-transform:uppercase;">First Floor</div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-top:0.15rem;">
+                  <span style="width:12px; height:12px; border-radius:3px; background:#00c4ee; display:inline-block; flex-shrink:0;"></span>
+                  <span style="font-weight:600; color:var(--text-main);">Euston Suite</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-top:0.15rem;">
+                  <span style="width:12px; height:12px; border-radius:3px; background:#9333ea; display:inline-block; flex-shrink:0;"></span>
+                  <span style="font-weight:600; color:var(--text-main);">Council Chamber</span>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border-color); padding-top:0.35rem;">
+                <div style="font-weight:700; color:var(--text-muted); font-size:0.7rem; text-transform:uppercase;">Ground Floor</div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-top:0.15rem;">
+                  <span style="width:12px; height:12px; border-radius:3px; background:#e9d5ff; border:1px solid #c084fc; display:inline-block; flex-shrink:0;"></span>
+                  <span style="font-weight:600; color:var(--text-main);">Regent Suite</span>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border-color); padding-top:0.35rem;">
+                <div style="font-weight:700; color:var(--text-muted); font-size:0.7rem; text-transform:uppercase;">Lower Ground</div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-top:0.15rem;">
+                  <span style="width:12px; height:12px; border-radius:3px; background:#a855f7; display:inline-block; flex-shrink:0;"></span>
+                  <span style="font-weight:600; color:var(--text-main);">Hallam Cafe</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.5rem; line-height:1.6;">
-            44 Hallam Street, Marylebone, London W1W 6JJ<br>
-            Conveniently located near Great Portland Street, Regent's Park, and Oxford Circus Stations.
+        </div>
+
+        <!-- Location Info & Map Button -->
+        <div style="background:var(--bg-body); border-radius:var(--radius-md); padding:1.25rem; border:1px solid var(--border-color); text-align:center;">
+          <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.5;">
+            <strong>Cavendish Venues</strong> — 44 Hallam Street, Marylebone, London W1W 6JJ<br>
+            <small>Short walk from Great Portland Street, Regent's Park, and Oxford Circus tube stations.</small>
           </p>
-          <a href="https://maps.app.goo.gl/J5EfA4VxxkCTsyoR7" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; font-size:0.95rem;">
+          <a href="https://maps.app.goo.gl/J5EfA4VxxkCTsyoR7" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.65rem 1.25rem; font-size:0.9rem;">
             <i data-lucide="map-pin"></i> Open Location in Google Maps <i data-lucide="external-link"></i>
           </a>
         </div>
@@ -282,9 +334,9 @@
       <div class="footer-col">
         <h4 class="footer-title">Quick Links</h4>
         <ul style="list-style:none; font-size:0.85rem; line-height:2;">
-          <li><a href="https://cls.ucl.ac.uk/events/cls-conference-2026/" target="_blank" rel="noopener noreferrer">Conference programme</a></li>
-          <li><a href="https://maps.app.goo.gl/J5EfA4VxxkCTsyoR7" target="_blank" rel="noopener noreferrer">Venue Map (Cavendish Venues)</a></li>
-          <li><a href="https://cls.ucl.ac.uk/signup/" target="_blank" rel="noopener noreferrer">Join our mailing list</a></li>
+          <li><a href="https://cls.ucl.ac.uk/events/cls-conference-2026/?utm_source=programme&utm_medium=web&utm_campaign=conf_2026" target="_blank" rel="noopener noreferrer" style="color:#ffffff;">Conference programme</a></li>
+          <li><a href="https://maps.app.goo.gl/J5EfA4VxxkCTsyoR7" target="_blank" rel="noopener noreferrer" style="color:#ffffff;">Venue Map (Cavendish Venues)</a></li>
+          <li><a href="https://cls.ucl.ac.uk/signup/?utm_source=programme&utm_medium=web&utm_campaign=conf_2026" target="_blank" rel="noopener noreferrer" style="color:#ffffff;">Join our mailing list</a></li>
         </ul>
       </div>
 
@@ -305,29 +357,6 @@
     <i data-lucide="arrow-up" style="width:20px; height:20px;"></i>
   </button>
 
-  <!-- Temporary Passcode Lock Overlay for Internal Testing -->
-  <div id="passcode-overlay" class="modal-overlay active" style="z-index: 9999; background: var(--bg-body);" role="dialog">
-    <div class="modal-container" style="max-width: 420px; text-align: center; padding: 2.5rem 1.5rem; margin: auto;">
-      <div style="width: 56px; height: 56px; border-radius: 50%; background: #f4eaef; color: var(--clr-ucl-purple); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto;">
-        <i data-lucide="lock" style="width: 28px; height: 28px;"></i>
-      </div>
-      <h2 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
-        CLS Conference 2026
-      </h2>
-      <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.5;">
-        This preview application is password-protected for internal organization testing. Enter passcode to unlock.
-      </p>
-      <form id="passcode-form" style="display: flex; flex-direction: column; gap: 1rem;">
-        <input type="password" id="passcode-input" placeholder="Enter passcode" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); font-size: 1.1rem; text-align: center; letter-spacing: 0.1em;" autocomplete="off" required>
-        <button type="submit" id="btn-passcode-submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem; font-size: 1rem;">
-          Unlock Preview <i data-lucide="arrow-right"></i>
-        </button>
-        <div id="passcode-error" style="display: none; color: var(--clr-danger); font-size: 0.85rem; font-weight: 600; margin-top: 0.25rem;">
-          Incorrect passcode. Please try again.
-        </div>
-      </form>
-    </div>
-  </div>
 
   <script src="sessions-data.js"></script>
   <script src="app.js"></script>
