@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const bookmarkBadgeCount = document.getElementById('bookmark-badge-count');
   
   const btnBookmarks = document.getElementById('btn-bookmarks');
-  const themeToggleBtn = document.getElementById('theme-toggle');
   const expandAllBtn = document.getElementById('btn-expand-all');
 
   // Modal Elements
@@ -224,6 +223,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     state.filteredSessions = filtered;
     renderSchedule();
+  }
+
+  // Poster session identification helpers
+  function isPosterTalk(t) {
+    if (!t) return false;
+    const type = (t.session_type || '').toLowerCase();
+    const track = (t.track_session || '').toLowerCase();
+    const block = (t.session_block || '').toLowerCase();
+    const title = (t.presentation_title || '').toLowerCase();
+    return type.includes('poster') || track.includes('poster') || block.includes('poster') || title.includes('poster');
+  }
+
+  function isPosterTrack(track) {
+    if (!track) return false;
+    const type = (track.sessionType || '').toLowerCase();
+    const title = (track.trackTitle || '').toLowerCase();
+    const talksPoster = track.talks && track.talks.length > 0 && track.talks.some(isPosterTalk);
+    return type.includes('poster') || title.includes('poster') || talksPoster;
   }
 
   // Determine if a track session should be expandable
@@ -456,6 +473,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const expandable = isTrackExpandable(track);
     const shouldExpand = expandable && (state.expandAllState || (state.searchQuery && state.searchQuery.length > 0));
     
+    const isPoster = isPosterTrack(track);
+    const itemNoun = isPoster 
+      ? (track.talks.length === 1 ? 'Poster' : 'Posters') 
+      : (track.talks.length === 1 ? 'Talk' : 'Talks');
+
     const trackKey = getTrackKey(track.trackTitle, track.day, track.time);
     const isBookmarked = state.bookmarks.has(trackKey);
 
@@ -464,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return `
       <div class="session-group-card ${shouldExpand ? 'expanded' : ''} ${!expandable ? 'static-card' : ''}">
-        <div class="session-group-header ${expandable ? 'clickable-header' : 'static-header'}" ${expandable ? `role="button" tabindex="0" aria-expanded="${shouldExpand ? 'true' : 'false'}" aria-label="Toggle presentations for ${escapeHtml(track.trackTitle)}"` : ''}>
+        <div class="session-group-header ${expandable ? 'clickable-header' : 'static-header'}" ${expandable ? `role="button" tabindex="0" aria-expanded="${shouldExpand ? 'true' : 'false'}" aria-label="Toggle ${isPoster ? 'posters' : 'presentations'} for ${escapeHtml(track.trackTitle)}"` : ''}>
           <div class="session-group-title-box">
             <div class="session-group-meta-row">
               ${hasRoom ? `
@@ -473,7 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </span>
               ` : ''}
               <span class="session-type-badge">${escapeHtml(track.sessionType)}</span>
-              ${expandable ? `<span class="talk-count-badge">${track.talks.length} ${track.talks.length === 1 ? 'Talk' : 'Talks'}</span>` : ''}
+              ${expandable ? `<span class="talk-count-badge">${track.talks.length} ${itemNoun}</span>` : ''}
             </div>
             <h3 class="session-group-title">${escapeHtml(track.trackTitle)}</h3>
             ${track.sessionChair ? `
@@ -496,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <i data-lucide="star" fill="${isBookmarked ? '#f59e0b' : 'none'}"></i>
             </button>
             ${expandable ? `
-              <div class="expand-indicator" title="Click to Expand/Collapse Talks">
+              <div class="expand-indicator" title="Click to Expand/Collapse ${isPoster ? 'Posters' : 'Talks'}">
                 <i data-lucide="chevron-down" style="width:18px; height:18px;"></i>
               </div>
             ` : ''}
@@ -504,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         ${expandable ? `
-          <div class="session-group-content" role="region" aria-label="${escapeHtml(track.trackTitle)} presentations">
+          <div class="session-group-content" role="region" aria-label="${escapeHtml(track.trackTitle)} ${isPoster ? 'posters' : 'presentations'}">
             <ul class="talk-list">
               ${track.talks.map(talk => createTalkItemHtml(talk)).join('')}
             </ul>
@@ -609,21 +631,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     html += '</div>';
 
-    function isPosterTalk(t) {
-      const type = (t.session_type || '').toLowerCase();
-      const track = (t.track_session || '').toLowerCase();
-      const block = (t.session_block || '').toLowerCase();
-      return type.includes('poster') || track.includes('poster') || block.includes('poster');
-    }
-
     function getSpeakerTalkLabel(talks) {
       const posterCount = talks.filter(isPosterTalk).length;
       const total = talks.length;
 
       if (posterCount === total) {
-        return total === 1 ? 'Poster session' : 'Poster sessions';
+        return total === 1 ? 'Poster' : 'Posters';
       } else if (posterCount > 0) {
-        return 'Presentations & Poster sessions';
+        return 'Presentations & Posters';
       } else {
         return total === 1 ? 'Presentation' : 'Presentations';
       }
@@ -663,7 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
                           ` : ''}
                           ${isPoster ? `
                             <span class="session-type-badge" style="background:#f4eaef; color:var(--clr-cls-cyan-dark); border-color:rgba(123,44,191,0.2); font-size:0.68rem; padding:0.1rem 0.45rem;">
-                              Poster session
+                              Poster
                             </span>
                           ` : ''}
                           <span style="font-weight:600; color:var(--clr-ucl-purple);">${escapeHtml(t.day)} (${escapeHtml(t.time_start)})</span>
@@ -930,18 +945,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btnBookmarks.classList.toggle('active', state.onlyBookmarks);
     applyFilters();
   });
-
-  themeToggleBtn.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('cls_theme', newTheme);
-  });
-
-  const savedTheme = localStorage.getItem('cls_theme');
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  }
 
   modalCloseBtn.addEventListener('click', closeModal);
   sessionModal.addEventListener('click', (e) => {
