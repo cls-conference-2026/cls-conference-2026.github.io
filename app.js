@@ -60,9 +60,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnOpenMap = document.getElementById('btn-open-map');
   const mapCloseBtn = document.getElementById('map-close-btn');
 
-  const ALL_PARALLEL_ROOMS = ["Council Chamber", "Oxford Suite", "Warren Suite", "Euston Suite"];
+  const ALL_PARALLEL_ROOMS = [
+    "Council Chamber (First Floor)",
+    "Oxford Suite (Third Floor)",
+    "Warren Suite (Third Floor)",
+    "Euston Suite (First Floor)"
+  ];
 
   const PARALLEL_ROOM_ORDER = {
+    "Council Chamber (First Floor)": 1,
+    "Oxford Suite (Third Floor)": 2,
+    "Warren Suite (Third Floor)": 3,
+    "Euston Suite (First Floor)": 4,
     "Council Chamber": 1,
     "Oxford Suite": 2,
     "Warren Suite": 3,
@@ -76,7 +85,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (room.includes('Oxford')) return 2;
     if (room.includes('Warren')) return 3;
     if (room.includes('Euston')) return 4;
+    if (room.includes('Regent')) return 5;
+    if (room.includes('Hallam') || room.includes('Cafe')) return 6;
     return 99;
+  }
+
+  function populateRoomFilterOptions() {
+    if (!roomFilterSelect) return;
+    const currentVal = state.selectedRoom || 'all';
+    const roomSet = new Set();
+    state.allSessions.forEach(s => {
+      if (s.room && s.room.trim().length > 0) {
+        roomSet.add(s.room.trim());
+      }
+    });
+
+    const sortedRooms = Array.from(roomSet).sort((a, b) => {
+      const orderA = getRoomOrderIndex(a);
+      const orderB = getRoomOrderIndex(b);
+      if (orderA !== orderB) return orderA - orderB;
+      return a.localeCompare(b);
+    });
+
+    let optionsHtml = '<option value="all">All Rooms</option>';
+    sortedRooms.forEach(room => {
+      optionsHtml += `<option value="${escapeHtml(room)}">${escapeHtml(room)}</option>`;
+    });
+
+    roomFilterSelect.innerHTML = optionsHtml;
+    roomFilterSelect.value = Array.from(roomSet).includes(currentVal) ? currentVal : 'all';
   }
 
   // 1. Synchronous / Async Schedule Loader
@@ -99,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    populateRoomFilterOptions();
     updateCounts();
     applyFilters();
   }
@@ -207,7 +245,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (state.selectedRoom !== 'all') {
-      filtered = filtered.filter(s => s.room === state.selectedRoom);
+      filtered = filtered.filter(s => 
+        s.room === state.selectedRoom || 
+        (s.room && state.selectedRoom && (s.room.includes(state.selectedRoom) || state.selectedRoom.includes(s.room)))
+      );
     }
 
     if (state.selectedType !== 'all') {
@@ -351,15 +392,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const isParallel = block.blockTitle && block.blockTitle.toLowerCase().includes('parallel');
 
-      // If it's a Parallel session block, ensure all 4 rooms are represented (ONLY when NOT in My Schedule view and NOT actively searching)
+      // Only show Council Chamber as not in use on Day 1, 15:25 (Do not show other rooms if they're not in use)
       const hasSearchQuery = state.searchQuery && state.searchQuery.trim().length > 0;
       if (isParallel && !state.onlyBookmarks && !hasSearchQuery) {
-        const existingRooms = new Set(Object.values(block.tracksMap).map(t => t.room));
-        ALL_PARALLEL_ROOMS.forEach(roomName => {
-          if (!existingRooms.has(roomName)) {
-            block.tracksMap[`unused_${roomName}`] = {
+        if (block.day === 'Day 1' && block.time === '15:25') {
+          const existingRooms = Array.from(new Set(Object.values(block.tracksMap).map(t => t.room)));
+          const councilRoom = "Council Chamber (First Floor)";
+          const isCouncilRepresented = existingRooms.some(r => r && r.includes('Council'));
+          if (!isCouncilRepresented) {
+            block.tracksMap[`unused_${councilRoom}`] = {
               trackTitle: "Room not in use",
-              room: roomName,
+              room: councilRoom,
               sessionType: "Parallel",
               day: block.day,
               time: block.time,
@@ -367,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
               talks: []
             };
           }
-        });
+        }
       }
 
       // Sort tracks by specified room order (Council Chamber, Oxford Suite, Warren Suite, Euston Suite)
